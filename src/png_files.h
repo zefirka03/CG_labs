@@ -70,12 +70,12 @@ Image read_png_file(char *filename) {
     out.pixels = (png_bytep*)malloc(sizeof(png_bytep) * out.height);
     for(int y = 0; y < out.height; y++)
         out.pixels[y] = (png_byte*)malloc(png_get_rowbytes(out.png,out.info));
-
-    printf("row: %d\n", png_get_rowbytes(out.png, out.info));
     
     png_read_image(out.png, out.pixels);
     
     fclose(fp);
+
+    //png_destroy_write_struct(&png, &info);
     
     return out;
 }
@@ -117,11 +117,6 @@ void write_png_file(Image const& img, char *filename) {
 
     png_write_image(png, img.pixels);
     png_write_end(png, NULL);
-
-    for(int y = 0; y < img.height; y++) {
-      free(img.pixels[y]);
-    }
-    free(img.pixels);
 
     fclose(fp);
 

@@ -7,7 +7,7 @@
 using blend_func_t = png_byte(*)(png_byte, png_byte, png_byte);
     
 png_byte default_blend_func(png_byte a, png_byte b, png_byte alpha) {
-    return a * (alpha / 255.f) + a * (1.f - alpha / 255.f);
+    return a * (alpha / 255.f) + b * (1.f - alpha / 255.f);
 }
 
 int blend(
@@ -20,7 +20,7 @@ int blend(
     if(
         a.height != b.height ||
         a.width != b.width ||
-        a.height != mask.width ||
+        a.height != mask.height ||
         a.width != mask.width
     ) return ERROR;
 
@@ -56,11 +56,11 @@ int circle_image(
 ) {
     int radius = std::min(a.width, a.height) / 2;
 
-    if (!out.pixels) {
+    //if (!out.pixels) {
         out.pixels = (png_bytep*)malloc(sizeof(png_bytep) * out.height);
         for (int y = 0; y < out.height; y++)
             out.pixels[y] = (png_byte*)malloc(png_get_rowbytes(a.png, a.info));
-    }
+   // }
 
     int center_w = a.width / 2;
     int center_h = a.height / 2;
@@ -88,12 +88,12 @@ int circle_image(
 
 int main(){
     Image out;
+    out.width = 1200;
+    out.height = 901;
+
     Image a = read_png_file("file1.png");
     Image b = read_png_file("file2.png");
     Image mask = read_png_file("file3.png");
-
-    out.width = 1200;
-    out.height = 901;
 
     blend(a, b, mask, out);
     write_png_file(out, "out.png");
