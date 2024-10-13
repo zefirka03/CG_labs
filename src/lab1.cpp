@@ -1,4 +1,4 @@
-#include <iostream>
+#include <algorithm>
 #include "png_files.h"
 
 #define ERROR 0
