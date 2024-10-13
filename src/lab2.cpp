@@ -1,5 +1,6 @@
 #include "png_files.h"
 #include <vector>
+#include <algorithm>
 
 #define F_P -1
 
@@ -24,6 +25,10 @@ public:
     void apply(Image& img, int x, int y) {
         png_bytep origin_px = &(img.pixels[y][x * 4]);
 
+        png_byte err_px[4];
+        for (int i = 0; i < 4; ++i)
+            err_px[i] = origin_px[i] - (origin_px[i] > 128 ? 255 : 0);
+
         for (int f_y = 0; f_y < m_data.size(); ++f_y) {
             for (int f_x = 0; f_x < m_data[f_y].size(); ++f_x) {
                 int _x = x + f_x - m_px_x;
@@ -34,14 +39,12 @@ public:
                     _y < 0 || _y >= img.height
                 ) continue;
 
-                if (
-                    f_x == m_px_x && 
-                    f_y == m_px_y
-                ) continue;
+                if (m_data[f_y][f_x] == F_P) 
+                    continue;
 
                 png_bytep px = &(img.pixels[_y][_x * 4]);
-                for (int i = 0; i < 4; ++i) 
-                    px[i] += origin_px[i] * (m_data[f_y][f_x] / static_cast<float>(m_sum));
+                for (int i = 0; i < 4; ++i)
+                    px[i] += err_px[i] * (m_data[f_y][f_x] / static_cast<float>(m_sum));
             }
         }
     }
