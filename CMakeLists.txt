@@ -27,7 +27,11 @@ file(GLOB_RECURSE SRC_FILES
     "src/*.h"
 )
 
-add_executable(CGlabs ${SRC_FILES})
+add_executable(CGlab_1 "src/lab1.cpp" "src/png_files.h")
+add_executable(CGlab_2 "src/lab2.cpp" "src/png_files.h")
 
-target_include_directories(CGlabs PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
-target_link_libraries(CGlabs PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
+target_include_directories(CGlab_1 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
+target_link_libraries(CGlab_1 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
+
+target_include_directories(CGlab_2 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
+target_link_libraries(CGlab_2 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
