@@ -56,11 +56,11 @@ int circle_image(
 ) {
     int radius = std::min(a.width, a.height) / 2;
 
-    //if (!out.pixels) {
+    if (!out.pixels) {
         out.pixels = (png_bytep*)malloc(sizeof(png_bytep) * out.height);
         for (int y = 0; y < out.height; y++)
             out.pixels[y] = (png_byte*)malloc(png_get_rowbytes(a.png, a.info));
-   // }
+    }
 
     int center_w = a.width / 2;
     int center_h = a.height / 2;
