@@ -97,7 +97,7 @@ void vertical_swap(Image& img) {
 }
 
 int main(){
-    Image a("img/file1.png");
+    Image a("img/capy.png");
     Image b("img/file2.png");
     Image mask("img/file3.png");
     
