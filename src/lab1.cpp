@@ -23,12 +23,9 @@ int blend(
         a.height != mask.height ||
         a.width != mask.width
     ) return ERROR;
-
-    if (!out.pixels) {
-        out.pixels = (png_bytep*)malloc(sizeof(png_bytep) * out.height);
-        for (int y = 0; y < out.height; y++)
-            out.pixels[y] = (png_byte*)malloc(png_get_rowbytes(a.png, a.info));
-    }
+    
+    if(!out.pixels)
+        a.same(out);
 
     for(int y = 0; y < a.height; y++) {
         png_bytep row_a = a.pixels[y];
@@ -56,11 +53,8 @@ int circle_image(
 ) {
     int radius = std::min(a.width, a.height) / 2;
 
-    if (!out.pixels) {
-        out.pixels = (png_bytep*)malloc(sizeof(png_bytep) * out.height);
-        for (int y = 0; y < out.height; y++)
-            out.pixels[y] = (png_byte*)malloc(png_get_rowbytes(a.png, a.info));
-    }
+    if (!out.pixels)
+        a.same(out);
 
     int center_w = a.width / 2;
     int center_h = a.height / 2;
@@ -86,20 +80,44 @@ int circle_image(
     return OK;
 }
 
+void horizontal_swap(Image& img){
+    for (int y = 0; y < img.height; ++y) {
+        png_bytep row = img.pixels[y];
+        
+        for (int x = 0; x < (img.width + 1) / 2; ++x) 
+            for(int i = 0; i < 4; ++i)
+                std::swap(row[x * 4 + i], row[(img.width - x - 1) * 4 + i]);
+    }
+}
+
+void vertical_swap(Image& img) {
+    for (int y = 0; y < (img.height + 1) / 2; ++y)
+        for (int x = 0; x < img.width * 4; ++x)
+            std::swap(img.pixels[y][x], img.pixels[img.height - 1 - y][x]);
+}
+
 int main(){
-    Image out;
-    out.width = 1200;
-    out.height = 901;
+    Image a("img/file1.png");
+    Image b("img/file2.png");
+    Image mask("img/file3.png");
+    
+    {
+        Image out;
+        blend(a, b, mask, out);
+        out.write_png_file("img/out.png");
+    }
 
-    Image a = read_png_file("file1.png");
-    Image b = read_png_file("file2.png");
-    Image mask = read_png_file("file3.png");
+    {
+        Image out;
+        circle_image(a, out);
+        out.write_png_file("img/out2.png");
+    }
 
-    blend(a, b, mask, out);
-    write_png_file(out, "out.png");
+    horizontal_swap(a);
+    a.write_png_file("img/swapped.png");
 
-    circle_image(a, out);
-    write_png_file(out, "out2.png");
-
+    vertical_swap(a);
+    a.write_png_file("img/swapped2.png");
+    
     return 0;
 }
