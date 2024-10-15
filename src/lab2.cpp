@@ -103,17 +103,17 @@ int main(){
         a.write_png_file("img/capy_1.png");
     }
     {
-        Image a("img/ml.png");
+        Image a("img/capy.png");
         FloydStainberg(a, 2);
         a.write_png_file("img/capy_2.png");
     }
     {
-        Image a("img/ml.png");
+        Image a("img/capy.png");
         FloydStainberg(a, 4);
         a.write_png_file("img/capy_4.png");
     }
     {
-        Image a("img/ml.png");
+        Image a("img/capy.png");
         FloydStainberg(a, 8);
         a.write_png_file("img/capy_8.png");
     }
