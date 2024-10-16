@@ -5,6 +5,9 @@
 
 #define F_P -1
 
+#define RGB 3
+#define RGBA 4
+
 struct Filter{
 private:
     std::vector<std::vector<int>> m_data;
@@ -24,16 +27,16 @@ public:
     }   
 
     void apply(
-        std::vector<std::vector<int>>& img, 
-        int width, int height,
+        Image& img,
         int x, int y,
-        int n
-    ) {
-        int* origin_px = &(img[y][x * 4]);
+        int n,
+        int channels = RGB
+    ) const {
+        auto origin_px = &(img.pixels[y][x * 4]);
         int colors = 1 << n;
 
         int err_px[4];
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < channels; ++i) {
             int new_px = int(std::round(origin_px[i] / 255.f * (colors - 1)) * (255.f / float(colors - 1)));
             err_px[i] = origin_px[i] - new_px;
             origin_px[i] = new_px;
@@ -45,17 +48,16 @@ public:
                 int _y = y + f_y - m_px_y;
 
                 if (
-                    _x < 0 || _x >= width ||
-                    _y < 0 || _y >= height
+                    _x < 0 || _x >= img.width ||
+                    _y < 0 || _y >= img.height
                 ) continue;
 
                 if (m_data[f_y][f_x] == F_P) 
                     continue;
                 
-                int* px = &(img[_y][_x * 4]);
-                for (int i = 0; i < 4; ++i) 
-                    px[i] += err_px[i] * (m_data[f_y][f_x] / float(m_sum));
-                
+                auto px = &(img.pixels[_y][_x * 4]);
+                for (int i = 0; i < channels; ++i)
+                    px[i] = std::min(std::max(0, int(px[i]) + int(err_px[i] * (m_data[f_y][f_x] / float(m_sum)))), 255);
             }
         }
     }
@@ -71,29 +73,12 @@ Filter default_filter(
 void FloydStainberg(
     Image& img,
     int n,
-    Filter filter = default_filter
+    Filter filter = default_filter,
+    int channels = RGB
 ) {
-    std::vector<std::vector<int>> pixels(img.height, std::vector<int>(img.width * 4, 0));
-    
     for (int y = 0; y < img.height; y++) 
-        for (int x = 0; x < img.width * 4; x++) 
-            pixels[y][x] = static_cast<int>(img.pixels[y][x]);
-
-    int normals[4] = { 0, 0, 0, 0 };
-    for (int y = 0; y < img.height; y++) {
-        for (int x = 0; x < img.width * 4; x++) {
-            filter.apply(pixels, img.width, img.height, x / 4, y, n);
-            normals[x % 4] = std::max(normals[x % 4], pixels[y][x]);
-        }
-    }
-
-    for (int y = 0; y < img.height; y++) 
-        for (int x = 0; x < img.width * 4; x++) 
-            pixels[y][x] = std::round((pixels[y][x] / float(normals[x % 4])) * 255);
-
-    for (int y = 0; y < img.height; y++)
-        for (int x = 0; x < img.width * 4; x++)
-            img.pixels[y][x] = pixels[y][x];
+        for (int x = 0; x < img.width; x++) 
+            filter.apply(img, x, y, n);
 }
 
 int main(){
@@ -117,7 +102,6 @@ int main(){
         FloydStainberg(a, 8);
         a.write_png_file("img/capy_8.png");
     }
-
 
 
     return 0;
