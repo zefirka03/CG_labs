@@ -27,11 +27,23 @@ file(GLOB_RECURSE SRC_FILES
     "src/*.h"
 )
 
+file(GLOB_RECURSE SRC_GFRAME
+${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32/GF.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32/DIBSection.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32/stdafx.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32/GFrameW32.cpp
+)
+
+set(INCLUDE_GFRAME ${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32)
+
 add_executable(CGlab_1 "src/lab1.cpp" "src/png_files.h")
 add_executable(CGlab_2 "src/lab2.cpp" "src/png_files.h")
+add_executable(CGlab_3 ${SRC_GFRAME} "src/lab3.cpp")
 
 target_include_directories(CGlab_1 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
 target_link_libraries(CGlab_1 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 
 target_include_directories(CGlab_2 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
 target_link_libraries(CGlab_2 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
+
+target_include_directories(CGlab_3 PRIVATE ${INCLUDE_GFRAME})

@@ -83,24 +83,24 @@ void FloydStainberg(
 
 int main(){
     {
-        Image a("img/capy.png");
+        Image a("img/eifel.png");
         FloydStainberg(a, 1);
-        a.write_png_file("img/capy_1.png");
+        a.write_png_file("img/eifel_1.png");
     }
     {
-        Image a("img/capy.png");
+        Image a("img/eifel.png");
         FloydStainberg(a, 2);
-        a.write_png_file("img/capy_2.png");
+        a.write_png_file("img/eifel_2.png");
     }
     {
-        Image a("img/capy.png");
+        Image a("img/eifel.png");
         FloydStainberg(a, 4);
-        a.write_png_file("img/capy_4.png");
+        a.write_png_file("img/eifel_4.png");
     }
     {
-        Image a("img/capy.png");
+        Image a("img/eifel.png");
         FloydStainberg(a, 8);
-        a.write_png_file("img/capy_8.png");
+        a.write_png_file("img/eifel_8.png");
     }
 
 

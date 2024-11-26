@@ -1,0 +1,5 @@
+﻿  Graphics.cpp
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(162,56): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "/Graphics.cpp")
+  
+  GFrameW32.vc2015.vcxproj -> C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\x64\Debug\GFrameW32.exe
