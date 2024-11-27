@@ -257,12 +257,43 @@ bool gfInitScene(){
     gfSetWindowSize( 640, 480 );
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
-
-    gfDrawPolygon(star, PInPolygonEOMode);
-    if(getPolygonCross(star))
-        for(int i=0; i<star.size(); ++i)
-            DrawLine(star[i].x, star[i].y, star[(i+1)%star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
-
+    std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
+    int test = 5;
+    
+    switch (test) {
+    case 0:
+        gfDrawPolygon(star, PInPolygonEOMode);
+        break;
+    case 1:
+        gfDrawPolygon(star, PInPolygonNZWMode);
+        break;
+    case 2:
+        gfDrawPolygon(star, PInPolygonEOMode);
+        if (getPolygonCross(star))
+            for (int i = 0; i < star.size(); ++i)
+                DrawLine(star[i].x, star[i].y, star[(i + 1) % star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
+        break;
+    case 3:
+        gfDrawPolygon(triangle, PInPolygonEOMode);
+        if (getPolygonCross(triangle))
+            for (int i = 0; i < triangle.size(); ++i)
+                DrawLine(triangle[i].x, triangle[i].y, triangle[(i + 1) % triangle.size()].x, triangle[(i + 1) % triangle.size()].y, RGBPIXEL::Green());
+        break;
+    case 4:
+        gfDrawPolygon(star, PInPolygonEOMode);
+        if (getPolygonType(star) == PolygonType::CONCAVE)
+            for (int i = 0; i < star.size(); ++i)
+                DrawLine(star[i].x, star[i].y, star[(i + 1) % star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
+        break;
+    case 5:
+        gfDrawPolygon(triangle, PInPolygonEOMode);
+        if (getPolygonType(triangle) == PolygonType::CONCAVE)
+            for (int i = 0; i < triangle.size(); ++i)
+                DrawLine(triangle[i].x, triangle[i].y, triangle[(i + 1) % triangle.size()].x, triangle[(i + 1) % triangle.size()].y, RGBPIXEL::Green());
+        break;
+    default:
+        break;
+    }
     return true;
 }
 
