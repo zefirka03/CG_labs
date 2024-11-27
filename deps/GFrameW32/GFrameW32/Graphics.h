@@ -36,4 +36,7 @@ void gfOnLMouseClick( int x, int y );
 void gfOnRMouseClick( int x, int y );
 void gfOnKeyDown( UINT key );
 void gfOnKeyUp( UINT key );
-void gfDrawPolygon(std::vector<point> const& points);
+
+PType PInPolygonEOMode(double x, double y, const point *p, int n);
+PType PInPolygonNZWMode(double x, double y, const point* p, int n);
+void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode);

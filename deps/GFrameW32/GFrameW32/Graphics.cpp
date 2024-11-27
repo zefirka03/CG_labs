@@ -144,7 +144,7 @@ PType PInPolygonNZWMode(double x, double y, const point* p, int n) {
     else return OUTSIDE;
 }
 
-void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode){
+void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n)){
     if (points.empty()) return;
 
     int x_min = INT_MAX, x_max = -INT_MAX;
@@ -173,8 +173,9 @@ bool gfInitScene(){
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
 
-    DrawLine(300, 300, 500, 0, RGBPIXEL::Green());
     gfDrawPolygon(star, PInPolygonEOMode);
+    //for(int i=0; i<star.size(); ++i)
+    //    DrawLine(star[i].x, star[i].y, star[(i+1)%star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
 
     return true;
 }
