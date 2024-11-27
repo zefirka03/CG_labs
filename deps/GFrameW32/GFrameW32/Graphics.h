@@ -28,6 +28,19 @@ enum PType {
     OUTSIDE 
 };
 
+enum PolygonType{
+    CONVEX,
+    CONCAVE
+};
+
+enum IntersectType {
+    SAME, 
+    PARALLEL,
+    SKEW, 
+    SKEW_CROSS, 
+    SKEW_NO_CROSS
+};
+
 // Graphics processing handler declarations
 bool gfInitScene();
 void gfDrawScene();
@@ -40,3 +53,20 @@ void gfOnKeyUp( UINT key );
 PType PInPolygonEOMode(double x, double y, const point *p, int n);
 PType PInPolygonNZWMode(double x, double y, const point* p, int n);
 void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode);
+PolygonType getPolygonType(std::vector<point> const& vert);
+
+IntersectType Intersect (
+    double ax, double ay, 
+    double bx, double by, 
+    double cx, double cy,
+    double dx, double dy, 
+    double *t
+);
+
+IntersectType Cross(
+    double ax, double ay, 
+    double bx, double by,
+    double cx, double cy,
+    double dx, double dy, 
+    double *tab, double *tcd
+);

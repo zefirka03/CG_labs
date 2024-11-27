@@ -168,14 +168,100 @@ void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, doub
     }
 }
 
+
+IntersectType Intersect (
+    double ax, double ay, 
+    double bx, double by, 
+    double cx, double cy,
+    double dx, double dy, 
+    double *t
+) {
+    double nx= dy - cy; //вычисление координат n
+    double ny= cx - dx;
+    CLPointType type;
+    double denom= nx*(bx - ax) + ny*(by - ay); //n ∗ b − a
+    if (denom == 0) { //параллельны или совпадают
+        type = Classify(cx,cy,dx,dy,ax,ay); // положение точки a относительно прямой cd
+        if (type == LEFT || type == RIGHT)
+        return PARALLEL;
+        else return SAME;
+    }
+    double num= nx*(ax - cx) + ny*(ay - cy); //n ∗ a − c
+    *t= -num/denom; // по значению t можно сделать вывод о пересечении отрезка ab
+    return SKEW;
+}
+
+IntersectType Cross(
+    double ax, double ay, 
+    double bx, double by,
+    double cx, double cy,
+    double dx, double dy, 
+    double *tab, double *tcd
+) {
+    IntersectType type = Intersect(ax, ay, bx, by, cx, cy, dx, dy, tab);
+    if (type==SAME || type==PARALLEL)
+    return type;
+    if ((*tab < 0) || (*tab > 1))
+    return SKEW_NO_CROSS;
+    Intersect(cx, cy, dx, dy, ax, ay, bx, by, tcd);
+    if ((*tcd < 0) || (*tcd > 1))
+    return SKEW_NO_CROSS;
+    return SKEW_CROSS;
+}
+
+PolygonType getPolygonType(std::vector<point> const& vert){
+    for(int s = 0; s < vert.size(); ++s){
+        const int vo = s;
+        const int vd = (s+1)%vert.size();
+        const point& a = vert[vo];
+        const point& b = vert[vd];
+
+        CLPointType curr_type = ORIGIN;
+        for(int v=0; v < vert.size(); ++v){
+            if(v == vo || v == vd) continue;
+            CLPointType temp_type = Classify(a.x, a.y, b.x, b.y, vert[v].x, vert[v].y);
+            if(curr_type == ORIGIN){
+                curr_type = temp_type;
+                continue;
+            }
+
+            if(curr_type != temp_type)
+                return CONCAVE;
+        }
+    }
+    return CONVEX;
+}
+
+int getPolygonCross(std::vector<point> const& vert){
+    for(int s = 0; s < vert.size(); ++s){
+        const int vo = s;
+        const int vd = (s+1)%vert.size();
+        const point& a0 = vert[vo];
+        const point& b0 = vert[vd];
+
+        for(int s1 = s + 1; s1 < vert.size(); ++s1){
+            const int vo1 = s1;
+            const int vd1 = (s1+1)%vert.size();
+            const point& a1 = vert[vo1];
+            const point& b1 = vert[vd1];
+
+            double tab, tcd;
+            if(Cross(a0.x, a0.y, b0.x, b0.y, a1.x, a1.y, b1.x, b1.y, &tab, &tcd) && tab * tcd != 0 && tab != 1 && tcd != 1)
+                return 1;
+        }
+    }
+    return 0;
+}
+
 bool gfInitScene(){
     gfSetWindowSize( 640, 480 );
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
 
     gfDrawPolygon(star, PInPolygonEOMode);
-    //for(int i=0; i<star.size(); ++i)
-    //    DrawLine(star[i].x, star[i].y, star[(i+1)%star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
+    if(getPolygonCross(star))
+        for(int i=0; i<star.size(); ++i)
+            DrawLine(star[i].x, star[i].y, star[(i+1)%star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
 
     return true;
 }
