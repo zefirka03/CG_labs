@@ -73,6 +73,10 @@ void DrawLine( int x0, int y0, int x1, int y1, RGBPIXEL color ) {
     }
 }
 
+void DrawLine(point a, point b, RGBPIXEL color) {
+    DrawLine(a.x, a.y, b.x, b.y, color);
+}
+
 CLPointType Classify(double x1, double y1, double x2, double y2, double x, double y) {
     double ax = x2 - x1;
     double ay = y2 - y1;
@@ -253,6 +257,57 @@ int getPolygonCross(std::vector<point> const& vert){
     return 0;
 }
 
+int CyrusBeckClipLine(double& x1, double& y1, double& x2, double& y2, std::vector<point> const& vert) {
+    double t1 = 0, t2 = 1, t;
+    double sx = x2 - x1, sy = y2 - y1;
+    double nx, ny, demon, num, x1_new, y1_new, x2_new, y2_new;
+    for (int i = 0; i < vert.size(); i++) {
+        nx = vert[(i + 1) % vert.size()].y - vert[i].y; ny = vert[i].x - vert[(i + 1) % vert.size()].x;
+        double denom = nx * sx + ny * sy;
+        num = nx * (x1 - vert[i].x) + ny * (y1 - vert[i].y);
+        if (denom != 0) {
+            t = -num / denom;
+            if (denom < 0) { 
+                if (t > t1) 
+                    t1 = t;
+            }
+            else {
+                if (t < t2) t2 = t;
+            }
+        }
+        else { if (Classify(vert[i].x, vert[i].y, vert[(i + 1) % vert.size()].x, vert[(i + 1) % vert.size()].y, x1, y1) == LEFT) return 0; } // параллельны
+    }
+    if (t1 <= t2) {
+        x1_new = x1 + t1 * (x2 - x1); y1_new = y1 + t1 * (y2 - y1);
+        x2_new = x1 + t2 * (x2 - x1); y2_new = y1 + t2 * (y2 - y1);
+        x1 = x1_new; y1 = y1_new; x2 = x2_new; y2 = y2_new;
+        return 1;
+    }
+    return 0;
+}
+
+point line(point p0, point p1, double t) {
+    return p0 * (1.0 - t) + p1 * t;
+}
+
+point BezierQuadratic(point p0, point p1, point p2, double t) {
+    return line(line(p0, p1, t), line(p1, p2, t), t);
+}
+
+point BezierCubic(point p0, point p1, point p2, point p3, double t) {
+    return line(BezierQuadratic(p0, p1, p2, t), BezierQuadratic(p1, p2, p3, t), t);
+}
+
+void gfDrawBezie(point p0, point p1, point p2, point p3, int qual, RGBPIXEL color) {
+    for (int i = 0; i < qual; ++i) {
+        DrawLine(
+            BezierCubic(p0, p1, p2, p3, i / float(qual)),
+            BezierCubic(p0, p1, p2, p3, (i + 1) / float(qual)),
+            color
+        );
+    }
+}
+
 bool gfInitScene(){
     gfSetWindowSize( 640, 480 );
     
@@ -260,40 +315,14 @@ bool gfInitScene(){
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
     int test = 5;
     
-    switch (test) {
-    case 0:
-        gfDrawPolygon(star, PInPolygonEOMode);
-        break;
-    case 1:
-        gfDrawPolygon(star, PInPolygonNZWMode);
-        break;
-    case 2:
-        gfDrawPolygon(star, PInPolygonEOMode);
-        if (getPolygonCross(star))
-            for (int i = 0; i < star.size(); ++i)
-                DrawLine(star[i].x, star[i].y, star[(i + 1) % star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
-        break;
-    case 3:
-        gfDrawPolygon(triangle, PInPolygonEOMode);
-        if (getPolygonCross(triangle))
-            for (int i = 0; i < triangle.size(); ++i)
-                DrawLine(triangle[i].x, triangle[i].y, triangle[(i + 1) % triangle.size()].x, triangle[(i + 1) % triangle.size()].y, RGBPIXEL::Green());
-        break;
-    case 4:
-        gfDrawPolygon(star, PInPolygonEOMode);
-        if (getPolygonType(star) == PolygonType::CONCAVE)
-            for (int i = 0; i < star.size(); ++i)
-                DrawLine(star[i].x, star[i].y, star[(i + 1) % star.size()].x, star[(i + 1) % star.size()].y, RGBPIXEL::Green());
-        break;
-    case 5:
-        gfDrawPolygon(triangle, PInPolygonEOMode);
-        if (getPolygonType(triangle) == PolygonType::CONCAVE)
-            for (int i = 0; i < triangle.size(); ++i)
-                DrawLine(triangle[i].x, triangle[i].y, triangle[(i + 1) % triangle.size()].x, triangle[(i + 1) % triangle.size()].y, RGBPIXEL::Green());
-        break;
-    default:
-        break;
-    }
+    gfDrawBezie({ 0,0 }, { 100,100 }, { 100,500 }, { 500, 500 });
+
+    gfDrawPolygon(triangle);
+    double x1 = 0, y1= 0, x2 = 640, y2= 480;
+    if(CyrusBeckClipLine(x1, y1, x2, y2, triangle))
+        DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+
+    
     return true;
 }
 
