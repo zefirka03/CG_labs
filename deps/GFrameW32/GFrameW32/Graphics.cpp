@@ -345,7 +345,7 @@ bool gfInitScene(){
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 0;
+    int test = 2;
     
     double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
     switch (test) {
@@ -355,7 +355,14 @@ bool gfInitScene(){
     case 1:
         DrawCircle({ 300, 300 }, 100, RGBPIXEL::Red());
         break;
+    case 2:
+        DrawCircle({ 300, 300 }, 50, RGBPIXEL::Red());
+        DrawCircle({ 300, 300 }, 100, RGBPIXEL::Red());
+        DrawCircle({ 300, 300 }, 150, RGBPIXEL::Red());
+
+        break;
     }
+
     
     return true;
 }
