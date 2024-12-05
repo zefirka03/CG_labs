@@ -308,32 +308,52 @@ void gfDrawBezie(point p0, point p1, point p2, point p3, int qual, RGBPIXEL colo
     }
 }
 
+void DrawCircle(point p0, double r, RGBPIXEL color) {
+    int x = 0;
+    int y = static_cast<int>(r); 
+    int d = 3 - 2 * static_cast<int>(r);
+
+    auto plot_circle_points = [&](int x_offset, int y_offset) {
+        gfSetPixel(static_cast<int>(p0.x + x_offset), static_cast<int>(p0.y + y_offset), color);
+        gfSetPixel(static_cast<int>(p0.x - x_offset), static_cast<int>(p0.y + y_offset), color);
+        gfSetPixel(static_cast<int>(p0.x + x_offset), static_cast<int>(p0.y - y_offset), color);
+        gfSetPixel(static_cast<int>(p0.x - x_offset), static_cast<int>(p0.y - y_offset), color);
+        gfSetPixel(static_cast<int>(p0.x + y_offset), static_cast<int>(p0.y + x_offset), color);
+        gfSetPixel(static_cast<int>(p0.x - y_offset), static_cast<int>(p0.y + x_offset), color);
+        gfSetPixel(static_cast<int>(p0.x + y_offset), static_cast<int>(p0.y - x_offset), color);
+        gfSetPixel(static_cast<int>(p0.x - y_offset), static_cast<int>(p0.y - x_offset), color);
+    };
+
+    plot_circle_points(x, y);
+
+    while (x < y) {
+        x++;
+
+        if (d <= 0) {
+            d = d + 4 * x + 6;
+        } else {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        }
+        
+        plot_circle_points(x, y);
+    }
+}
+
 bool gfInitScene(){
     gfSetWindowSize( 640, 480 );
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 1;
+    int test = 0;
     
     double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
     switch (test) {
     case 0:
-        gfDrawBezie({ 0,0 }, { 100,100 }, { 100,500 }, { 640, 480 });
-
-        gfDrawPolygon(triangle);
-        if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
-            DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        DrawCircle({ 300, 300 }, 50, RGBPIXEL::Red());
         break;
     case 1:
-        gfDrawBezie({ 100,100 }, { 300,100 }, { 100,500 }, { 440, 400 });
-
-        gfDrawPolygon(triangle);
-
-        x1 = 200, y1 = 0;
-        x2 = 200, y2 = 480;
-      
-        if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
-            DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        DrawCircle({ 300, 300 }, 100, RGBPIXEL::Red());
         break;
     }
     

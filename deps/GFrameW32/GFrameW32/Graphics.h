@@ -68,6 +68,8 @@ void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, doub
 PolygonType getPolygonType(std::vector<point> const& vert);
 void gfDrawBezie(point p0, point p1, point p2, point p3, int qual = 200, RGBPIXEL color = RGBPIXEL::Blue());
 
+void DrawCircle(point p0, double r, RGBPIXEL color = RGBPIXEL::Blue());
+
 IntersectType Intersect (
     double ax, double ay, 
     double bx, double by, 
