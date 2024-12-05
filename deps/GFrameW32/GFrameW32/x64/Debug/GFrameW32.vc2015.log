@@ -1,11 +1,4 @@
-﻿  GFrameW32.cpp
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(15,14): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/GFrameW32.cpp")
-  
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(16,14): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/GFrameW32.cpp")
-  
-  Graphics.cpp
+﻿  Graphics.cpp
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(15,14): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
@@ -18,20 +11,28 @@ C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(168,56): 
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(263,20): warning C4101: demon: неиспользованная локальная переменная
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(323,30): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(325,34): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(323,26): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(325,30): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(323,22): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(325,26): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(323,18): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(325,22): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(316,9): warning C4189: test: локальная переменная инициализирована, но не использована
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(336,34): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
-  Создание кода...
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(336,30): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(336,26): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(336,22): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+  (компиляция исходного файла "/Graphics.cpp")
+  
   GFrameW32.vc2015.vcxproj -> C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\x64\Debug\GFrameW32.exe

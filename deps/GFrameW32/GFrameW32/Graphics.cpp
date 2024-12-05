@@ -180,18 +180,18 @@ IntersectType Intersect (
     double dx, double dy, 
     double *t
 ) {
-    double nx= dy - cy; //вычисление координат n
+    double nx= dy - cy;
     double ny= cx - dx;
     CLPointType type;
-    double denom= nx*(bx - ax) + ny*(by - ay); //n ∗ b − a
-    if (denom == 0) { //параллельны или совпадают
-        type = Classify(cx,cy,dx,dy,ax,ay); // положение точки a относительно прямой cd
+    double denom= nx*(bx - ax) + ny*(by - ay);
+    if (denom == 0) {
+        type = Classify(cx,cy,dx,dy,ax,ay);
         if (type == LEFT || type == RIGHT)
         return PARALLEL;
         else return SAME;
     }
-    double num= nx*(ax - cx) + ny*(ay - cy); //n ∗ a − c
-    *t= -num/denom; // по значению t можно сделать вывод о пересечении отрезка ab
+    double num= nx*(ax - cx) + ny*(ay - cy);
+    *t= -num/denom;
     return SKEW;
 }
 
@@ -313,15 +313,29 @@ bool gfInitScene(){
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 5;
+    int test = 1;
     
-    gfDrawBezie({ 0,0 }, { 100,100 }, { 100,500 }, { 500, 500 });
+    double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
+    switch (test) {
+    case 0:
+        gfDrawBezie({ 0,0 }, { 100,100 }, { 100,500 }, { 640, 480 });
 
-    gfDrawPolygon(triangle);
-    double x1 = 0, y1= 0, x2 = 640, y2= 480;
-    if(CyrusBeckClipLine(x1, y1, x2, y2, triangle))
-        DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        gfDrawPolygon(triangle);
+        if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
+            DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        break;
+    case 1:
+        gfDrawBezie({ 100,100 }, { 300,100 }, { 100,500 }, { 440, 400 });
 
+        gfDrawPolygon(triangle);
+
+        x1 = 200, y1 = 0;
+        x2 = 200, y2 = 480;
+      
+        if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
+            DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        break;
+    }
     
     return true;
 }
