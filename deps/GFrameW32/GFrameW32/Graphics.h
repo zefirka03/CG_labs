@@ -2,8 +2,8 @@
 #include <vector>
 
 struct point {
-    int x;
-    int y;
+    double x;
+    double y;
 
     point& operator+(point& a) {
         x += a.x;
@@ -64,7 +64,7 @@ void gfOnKeyUp( UINT key );
 
 PType PInPolygonEOMode(double x, double y, const point *p, int n);
 PType PInPolygonNZWMode(double x, double y, const point* p, int n);
-void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode);
+void gfDrawPolygon(std::vector<point> const& points, RGBPIXEL color = RGBPIXEL::Red(), PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode);
 PolygonType getPolygonType(std::vector<point> const& vert);
 void gfDrawBezie(point p0, point p1, point p2, point p3, int qual = 200, RGBPIXEL color = RGBPIXEL::Blue());
 

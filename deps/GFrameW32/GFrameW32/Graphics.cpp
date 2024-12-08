@@ -148,7 +148,7 @@ PType PInPolygonNZWMode(double x, double y, const point* p, int n) {
     else return OUTSIDE;
 }
 
-void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n)){
+void gfDrawPolygon(std::vector<point> const& points, RGBPIXEL color, PType(*inFucn)(double, double, const point* p, int n)){
     if (points.empty()) return;
 
     int x_min = INT_MAX, x_max = -INT_MAX;
@@ -166,7 +166,7 @@ void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, doub
     for (int x = x_min; x < x_max; ++x) {
         for (int y = y_min; y < y_max; ++y) {
             if (inFucn(x, y, points.data(), points.size()) == PType::INSIDE) {
-                gfSetPixel(x, y, RGBPIXEL(255, 0, 0));
+                gfSetPixel(x, y, color);
             }
         }
     }
@@ -257,7 +257,7 @@ int getPolygonCross(std::vector<point> const& vert){
     return 0;
 }
 
-int CyrusBeckClipLine(double& x1, double& y1, double& x2, double& y2, std::vector<point> const& vert) {
+bool CyrusBeckClipLine(double& x1, double& y1, double& x2, double& y2, std::vector<point> const& vert) {
     double t1 = 0, t2 = 1, t;
     double sx = x2 - x1, sy = y2 - y1;
     double nx, ny, demon, num, x1_new, y1_new, x2_new, y2_new;
@@ -281,10 +281,60 @@ int CyrusBeckClipLine(double& x1, double& y1, double& x2, double& y2, std::vecto
         x1_new = x1 + t1 * (x2 - x1); y1_new = y1 + t1 * (y2 - y1);
         x2_new = x1 + t2 * (x2 - x1); y2_new = y1 + t2 * (y2 - y1);
         x1 = x1_new; y1 = y1_new; x2 = x2_new; y2 = y2_new;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
+
+bool isInside(const point& p, const point& a, const point& b) {
+    return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x) >= 0;
+}
+
+std::vector<point> sutherlandHodgmanClip(const std::vector<point>& subjectPolygon, const std::vector<point>& clipPolygon) {
+    std::vector<point> output = subjectPolygon;
+
+    for (size_t i = 0; i < clipPolygon.size(); ++i) {
+        std::vector<point> input = output;
+        output.clear();
+
+        point clipStart = clipPolygon[i];
+        point clipEnd = clipPolygon[(i + 1) % clipPolygon.size()];
+
+        for (size_t j = 0; j < input.size(); ++j) {
+            point current = input[j];
+            point previous = input[(j - 1 + input.size()) % input.size()];
+
+            bool insideCurrent = isInside(current, clipStart, clipEnd);
+            bool insidePrevious = isInside(previous, clipStart, clipEnd);
+
+            if (insideCurrent) {
+                output.push_back(current);
+            }
+
+            if (insideCurrent != insidePrevious) {
+                double t;
+                Intersect(
+                    previous.x, previous.y, 
+                    current.x, current.y,
+                    clipStart.x, clipStart.y, 
+                    clipEnd.x, clipEnd.y,
+                    &t
+                );
+
+                if (t >= 0 && t <= 1) {
+                    point intersection = {
+                        previous.x + t * (current.x - previous.x),
+                        previous.y + t * (current.y - previous.y)
+                    };
+                    output.push_back(intersection);
+                }
+            }
+        }
+    }
+
+    return output;
+}
+
 
 point line(point p0, point p1, double t) {
     return p0 * (1.0 - t) + p1 * t;
@@ -313,7 +363,7 @@ bool gfInitScene(){
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 1;
+    int test = 2;
     
     double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
     switch (test) {
@@ -334,6 +384,15 @@ bool gfInitScene(){
       
         if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
             DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
+        break;
+    case 2:
+        std::vector<point> triangle_a{ {100, 400}, {250, 100}, {400, 400} };
+        std::vector<point> triangle_b{ {100, 500}, {250, 200}, {400, 500} };
+        gfDrawPolygon(triangle_a);
+        gfDrawPolygon(triangle_b);
+
+        auto a = sutherlandHodgmanClip(triangle_b, triangle_a);
+        gfDrawPolygon(a, RGBPIXEL::Blue());
         break;
     }
     
