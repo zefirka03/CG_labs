@@ -98,7 +98,7 @@ public:
 		png_destroy_read_struct(&png, &info, (png_infopp)NULL);
 	}
 
-	void write_png_file(char *filename) const {
+	void write_png_file(const char *filename) const {
 		FILE *fp = fopen(filename, "wb");
 		if(!fp) abort();
 

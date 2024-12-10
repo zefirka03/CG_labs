@@ -3,17 +3,14 @@ project(CGlabs)
 
 set(PNG_SHARED OFF)
 
-# Укажите путь к папке deps
 set(ZLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib-1.3.1)
 set(PNG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/lpng1644)
 
-# Найти zlib
 set(ZLIB_INCLUDE_DIR ${ZLIB_DIR})
-set(ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/zlib-1.3.1/Release/zlibstatic.lib) # Укажите правильный путь к zlib.lib, если он существует
+set(ZLIB_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/zlib-1.3.1/Release/zlibstatic.lib)
 
-# Находим libpng
 set(PNG_INCLUDE_DIR ${PNG_DIR})
-set(PNG_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/lpng1644/Release/libpng16_static.lib) # Укажите правильный путь к libpng.lib, если он существует
+set(PNG_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/lpng1644/Release/libpng16_static.lib)
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib-1.3.1")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/deps/lpng1644")
@@ -38,7 +35,7 @@ set(INCLUDE_GFRAME ${CMAKE_CURRENT_SOURCE_DIR}/deps/GFrameW32/GFrameW32)
 
 add_executable(CGlab_1 "src/lab1.cpp" "src/png_files.h")
 add_executable(CGlab_2 "src/lab2.cpp" "src/png_files.h")
-add_executable(CGlab_3 ${SRC_GFRAME} "src/lab3.cpp")
+add_executable(CGlab_dz3 "src/dz3.cpp" "src/png_files.h")
 
 target_include_directories(CGlab_1 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
 target_link_libraries(CGlab_1 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
@@ -46,4 +43,6 @@ target_link_libraries(CGlab_1 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 target_include_directories(CGlab_2 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
 target_link_libraries(CGlab_2 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 
-target_include_directories(CGlab_3 PRIVATE ${INCLUDE_GFRAME})
+target_include_directories(CGlab_dz3 PRIVATE ${ZLIB_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
+target_link_libraries(CGlab_dz3 PRIVATE ${ZLIB_LIBRARY} ${PNG_LIBRARY})
+
