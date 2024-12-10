@@ -287,7 +287,7 @@ bool CyrusBeckClipLine(double& x1, double& y1, double& x2, double& y2, std::vect
 }
 
 bool isInside(const point& p, const point& a, const point& b) {
-    return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x) >= 0;
+    return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x) < 0;
 }
 
 std::vector<point> sutherlandHodgmanClip(const std::vector<point>& subjectPolygon, const std::vector<point>& clipPolygon) {
@@ -301,17 +301,35 @@ std::vector<point> sutherlandHodgmanClip(const std::vector<point>& subjectPolygo
         point clipEnd = clipPolygon[(i + 1) % clipPolygon.size()];
 
         for (size_t j = 0; j < input.size(); ++j) {
-            point current = input[j];
-            point previous = input[(j - 1 + input.size()) % input.size()];
+            point const& previous = input[j];
+            point const& current = input[(j + 1) % input.size()];
 
             bool insideCurrent = isInside(current, clipStart, clipEnd);
             bool insidePrevious = isInside(previous, clipStart, clipEnd);
 
-            if (insideCurrent) {
-                output.push_back(current);
+            if (insideCurrent && insidePrevious) {
+                output.push_back(previous);
             }
-
-            if (insideCurrent != insidePrevious) {
+            else if (!insideCurrent && insidePrevious) {
+                double t;
+                Intersect(
+                    previous.x, previous.y,
+                    current.x, current.y,
+                    clipStart.x, clipStart.y,
+                    clipEnd.x, clipEnd.y,
+                    &t
+                );
+                output.push_back(previous);
+                if (t >= 0 && t <= 1) {
+                    point intersection = {
+                        previous.x + t * (current.x - previous.x),
+                        previous.y + t * (current.y - previous.y)
+                    };
+                    output.push_back(intersection);
+                }
+                
+            }
+            else if (insideCurrent && !insidePrevious) {
                 double t;
                 Intersect(
                     previous.x, previous.y, 
@@ -328,6 +346,7 @@ std::vector<point> sutherlandHodgmanClip(const std::vector<point>& subjectPolygo
                     };
                     output.push_back(intersection);
                 }
+
             }
         }
     }
@@ -363,37 +382,65 @@ bool gfInitScene(){
     
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
     std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 2;
+    int test = 3;
     
     double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
     switch (test) {
     case 0:
+    {
         gfDrawBezie({ 0,0 }, { 100,100 }, { 100,500 }, { 640, 480 });
 
         gfDrawPolygon(triangle);
         if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
             DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
         break;
+    }
     case 1:
+    {
         gfDrawBezie({ 100,100 }, { 300,100 }, { 100,500 }, { 440, 400 });
 
         gfDrawPolygon(triangle);
 
         x1 = 200, y1 = 0;
         x2 = 200, y2 = 480;
-      
+
         if (CyrusBeckClipLine(x1, y1, x2, y2, triangle))
             DrawLine(x1, y1, x2, y2, RGBPIXEL::Green());
         break;
+    }
     case 2:
+    {
         std::vector<point> triangle_a{ {100, 400}, {250, 100}, {400, 400} };
-        std::vector<point> triangle_b{ {100, 500}, {250, 200}, {400, 500} };
+        std::vector<point> triangle_b{ {400, 500}, {250, 200}, {100, 500} };
         gfDrawPolygon(triangle_a);
         gfDrawPolygon(triangle_b);
 
-        auto a = sutherlandHodgmanClip(triangle_b, triangle_a);
+        auto a = sutherlandHodgmanClip(triangle_a, triangle_b);
         gfDrawPolygon(a, RGBPIXEL::Blue());
         break;
+    }
+    case 3:
+    {
+        std::vector<point> quad_a{ {100, 500}, {500, 500}, {500, 100}, {100, 100} };
+        std::vector<point> quad_b{ {400, 400}, {600, 400}, {600, 200}, {400, 200} };
+        gfDrawPolygon(quad_a);
+        gfDrawPolygon(quad_b);
+
+        auto a = sutherlandHodgmanClip(quad_b, quad_a);
+        gfDrawPolygon(a, RGBPIXEL::Blue());
+        break;
+    }
+    case 4:
+    {
+        std::vector<point> quad_a{ {100, 500}, {500, 500}, {500, 100}, {100, 100} };
+        std::vector<point> quad_b{ {400, 400}, {600, 400}, {600, 200}, {400, 200} };
+        gfDrawPolygon(quad_a);
+        gfDrawPolygon(quad_b);
+
+        auto a = sutherlandHodgmanClip(quad_a, quad_b);
+        gfDrawPolygon(a, RGBPIXEL::Blue());
+        break;
+    }
     }
     
     return true;
