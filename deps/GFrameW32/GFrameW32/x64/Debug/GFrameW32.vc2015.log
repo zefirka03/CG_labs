@@ -1,11 +1,4 @@
-﻿  GFrameW32.cpp
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(26,18): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/GFrameW32.cpp")
-  
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(27,18): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/GFrameW32.cpp")
-  
-  Graphics.cpp
+﻿  Graphics.cpp
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(26,18): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
   (компиляция исходного файла "/Graphics.cpp")
   
@@ -30,5 +23,4 @@ C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,12): 
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,28): warning C4189: x2: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   
-  Создание кода...
   GFrameW32.vc2015.vcxproj -> C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\x64\Debug\GFrameW32.exe

@@ -24,13 +24,13 @@ struct Color {
 
 using Color_8 = Color<unsigned char>;
 
-class KMeans {
+class KMedians {
 private:
     int k;
     int max_iterations;
 
 public:
-    KMeans(int k, int max_iterations = 100) : k(k), max_iterations(max_iterations) {
+    KMedians(int k, int max_iterations = 100) : k(k), max_iterations(max_iterations) {
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
     }
 
@@ -75,25 +75,33 @@ private:
     }
 
     std::vector<Color_8> _update_centroids(const std::vector<Color_8>& colors, const std::vector<int>& labels) {
-        std::vector<Color<int>> new_centroids(k, { 0, 0, 0, 255 }); 
-        std::vector<Color_8> new_centroids_out(k); 
-        std::vector<int> counts(k, 0);
+        std::vector<std::vector<Color_8>> color_groups(k);
 
         for (size_t i = 0; i < colors.size(); ++i) {
             int label = labels[i];
-            new_centroids[label].r += colors[i].r;
-            new_centroids[label].g += colors[i].g;
-            new_centroids[label].b += colors[i].b;
-            new_centroids[label].a = colors[i].a;
-            ++counts[label];
+            color_groups[label].push_back(colors[i]);
         }
 
+        std::vector<Color_8> new_centroids_out(k);
+
         for (int i = 0; i < k; ++i) {
-            if (counts[i] > 0) {
-                new_centroids_out[i].r = new_centroids[i].r / counts[i];
-                new_centroids_out[i].g = new_centroids[i].g / counts[i];
-                new_centroids_out[i].b = new_centroids[i].b / counts[i];
-                new_centroids_out[i].a = new_centroids[i].a;
+            if (!color_groups[i].empty()) {
+                std::vector<int> r_values, g_values, b_values;
+                for (const auto& color : color_groups[i]) {
+                    r_values.push_back(color.r);
+                    g_values.push_back(color.g);
+                    b_values.push_back(color.b);
+                }
+
+                std::sort(r_values.begin(), r_values.end());
+                std::sort(g_values.begin(), g_values.end());
+                std::sort(b_values.begin(), b_values.end());
+
+                size_t n = r_values.size();
+                new_centroids_out[i].r = (n % 2 == 0) ? (r_values[n / 2 - 1] + r_values[n / 2]) / 2 : r_values[n / 2];
+                new_centroids_out[i].g = (n % 2 == 0) ? (g_values[n / 2 - 1] + g_values[n / 2]) / 2 : g_values[n / 2];
+                new_centroids_out[i].b = (n % 2 == 0) ? (b_values[n / 2 - 1] + b_values[n / 2]) / 2 : b_values[n / 2];
+                new_centroids_out[i].a = color_groups[i][0].a;
             }
         }
 
@@ -111,7 +119,7 @@ void quantize_image(Image& img, int k) {
         }
     }
 
-    KMeans kmeans(k, 50);
+    KMedians kmeans(k, 50);
     auto centroids = kmeans.quantize(colors);
 
     for (int y = 0; y < img.height; ++y) {
