@@ -422,7 +422,7 @@ bool gfInitScene(){
     case 3:
     {
         std::vector<point> quad_a{ {100, 500}, {500, 500}, {500, 100}, {100, 100} };
-        std::vector<point> quad_b{ {400, 400}, {600, 400}, {600, 200}, {400, 200} };
+        std::vector<point> quad_b{ {200, 400}, {400, 400}, {400, 200}, {200, 200} };
         gfDrawPolygon(quad_a);
         gfDrawPolygon(quad_b);
 
@@ -433,7 +433,7 @@ bool gfInitScene(){
     case 4:
     {
         std::vector<point> quad_a{ {100, 500}, {500, 500}, {500, 100}, {100, 100} };
-        std::vector<point> quad_b{ {400, 400}, {600, 400}, {600, 200}, {400, 200} };
+        std::vector<point> quad_b{ {200, 400}, {400, 400}, {400, 200}, {200, 200} };
         gfDrawPolygon(quad_a);
         gfDrawPolygon(quad_b);
 
