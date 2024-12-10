@@ -154,17 +154,17 @@ int main() {
         a.write_png_file("img/capy_2.png");
     }
     {
-        Image a("img/eifel.png");
+        Image a("img/capy.png");
         quantize_image(a, 24);
         a.write_png_file("img/capy_4.png");
     }
     {
-        Image a("img/eifel.png");
+        Image a("img/capy.png");
         quantize_image(a, 24);
         a.write_png_file("img/capy_12.png");
     }
     {
-        Image a("img/eifel.png");
+        Image a("img/capy.png");
         quantize_image(a, 24);
         a.write_png_file("img/capy_24.png");
     }
