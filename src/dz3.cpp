@@ -137,45 +137,10 @@ void quantize_image(Image& img, int k) {
 int main() {
     {
         Image a("img/eifel.png");
-        quantize_image(a, 2);
-        a.write_png_file("img/eifel_2.png");
+        quantize_image(a, 256);
+        a.write_png_file("img/eifel_256.png");
     }
-    {
-        Image a("img/eifel.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/eifel_4.png");
-    }
-    {
-        Image a("img/eifel.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/eifel_12.png");
-    }
-    {
-        Image a("img/eifel.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/eifel_24.png");
-    }
-
-    {
-        Image a("img/capy.png");
-        quantize_image(a, 2);
-        a.write_png_file("img/capy_2.png");
-    }
-    {
-        Image a("img/capy.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/capy_4.png");
-    }
-    {
-        Image a("img/capy.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/capy_12.png");
-    }
-    {
-        Image a("img/capy.png");
-        quantize_image(a, 24);
-        a.write_png_file("img/capy_24.png");
-    }
+    
 
     return 0;
 }

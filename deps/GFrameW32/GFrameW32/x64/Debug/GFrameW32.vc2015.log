@@ -11,6 +11,30 @@ C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(168,56): 
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(263,20): warning C4101: demon: неиспользованная локальная переменная
   (компиляция исходного файла "/Graphics.cpp")
   
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "1" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "2" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "3" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "4" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "5" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "6" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "7" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "8" имеет тип "int"
+  (компиляция исходного файла "/Graphics.cpp")
+  
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,38): warning C4189: y2: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   

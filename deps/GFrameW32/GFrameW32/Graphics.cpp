@@ -384,6 +384,7 @@ bool gfInitScene() {
         point c0, c1, c2, c3;
 
         ConvertQuadraticToCubic(q0,q1,q2,c0,c1,c2,c3);
+        printf("(%f %f), (%f %f), (%f %f), (%f %f)\n", c0.x, c0.y, c1.x, c1.y, c2.x, c2.y, c3.x, c3.y);
         gfDrawBezie(q0,q1,q2, RGBPIXEL::Red(),150);
         gfDrawBezie(c0, c1, c2, c3, RGBPIXEL::Blue(),150);
 
