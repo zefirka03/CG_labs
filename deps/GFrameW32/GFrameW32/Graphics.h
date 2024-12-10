@@ -5,17 +5,38 @@ struct point {
     int x;
     int y;
 
-    point& operator+(point& a) {
-        x += a.x;
-        y += a.y;
+    point(int x = 0, int y = 0) : x(x), y(y) {}
+
+    point operator+(const point& a) const {
+        point out = *this;
+        out.x += a.x;
+        out.y += a.y;
+        return out;
+    }
+
+    point operator-(const point& a) const {
+        point out = *this;
+        out.x -= a.x;
+        out.y -= a.y;
+        return out;
+    }
+
+    point operator*(double t) const {
+        point out = *this;
+        out.x *= t;
+        out.y *= t;
+        return out;
+    }
+
+    point& operator=(const point& a) {
+        if (this != &a) {
+            x = a.x;
+            y = a.y;
+        }
         return *this;
     }
 
-    point& operator*(double t) {
-        x *= t;
-        y *= t;
-        return *this;
-    }
+    point(const point& a) : x(a.x), y(a.y) {}
 };
 
 enum CLPointType {

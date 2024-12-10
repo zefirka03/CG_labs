@@ -299,10 +299,10 @@ point BezierCubic(point p0, point p1, point p2, point p3, double t) {
 }
 
 void ConvertQuadraticToCubic(point q0, point q1, point q2, point& c0, point& c1, point& c2, point& c3) {
-    c0 = q0;             // P0 остается тем же
-    c1 = q0;             // P1 становится P0
-    c2 = q1;             // P2 становится P1
-    c3 = q2;             // P3 становится P2
+    c0 = q0; 
+    c1 = q0 + (q1 - q0) * (2.f / 3.f);
+    c2 = q2 + (q1 - q2) * (2.f / 3.f);
+    c3 = q2; 
 }
 
 void gfDrawBezie(point p0, point p1, point p2, RGBPIXEL color, int qual) {
