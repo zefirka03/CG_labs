@@ -11,16 +11,16 @@ C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(168,56): 
 C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(263,20): warning C4101: demon: неиспользованная локальная переменная
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(350,38): warning C4189: y2: локальная переменная инициализирована, но не использована
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,38): warning C4189: y2: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(350,20): warning C4189: y1: локальная переменная инициализирована, но не использована
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,20): warning C4189: y1: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(350,12): warning C4189: x1: локальная переменная инициализирована, но не использована
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,12): warning C4189: x1: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(350,28): warning C4189: x2: локальная переменная инициализирована, но не использована
+C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,28): warning C4189: x2: локальная переменная инициализирована, но не использована
   (компиляция исходного файла "/Graphics.cpp")
   
   GFrameW32.vc2015.vcxproj -> C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\x64\Debug\GFrameW32.exe

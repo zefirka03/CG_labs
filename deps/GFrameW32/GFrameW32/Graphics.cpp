@@ -298,7 +298,24 @@ point BezierCubic(point p0, point p1, point p2, point p3, double t) {
     return line(BezierQuadratic(p0, p1, p2, t), BezierQuadratic(p1, p2, p3, t), t);
 }
 
-void gfDrawBezie(point p0, point p1, point p2, point p3, int qual, RGBPIXEL color) {
+void ConvertQuadraticToCubic(point q0, point q1, point q2, point& c0, point& c1, point& c2, point& c3) {
+    c0 = q0;             // P0 остается тем же
+    c1 = q0;             // P1 становится P0
+    c2 = q1;             // P2 становится P1
+    c3 = q2;             // P3 становится P2
+}
+
+void gfDrawBezie(point p0, point p1, point p2, RGBPIXEL color, int qual) {
+    for (int i = 0; i < qual; ++i) {
+        DrawLine(
+            BezierQuadratic(p0, p1, p2, i / float(qual)),
+            BezierQuadratic(p0, p1, p2, (i + 1) / float(qual)),
+            color
+        );
+    }
+}
+
+void gfDrawBezie(point p0, point p1, point p2, point p3, RGBPIXEL color, int qual) {
     for (int i = 0; i < qual; ++i) {
         DrawLine(
             BezierCubic(p0, p1, p2, p3, i / float(qual)),
@@ -340,13 +357,13 @@ void DrawCircle(point p0, double r, RGBPIXEL color) {
     }
 }
 
-bool gfInitScene(){
-    gfSetWindowSize( 640, 480 );
-    
+bool gfInitScene() {
+    gfSetWindowSize(640, 480);
+
     std::vector<point> star{ {100, 400}, {250, 100}, {400, 400}, {80, 150}, {420, 150} };
-    std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400}};
-    int test = 2;
-    
+    std::vector<point> triangle{ {100, 400}, {250, 100}, {400, 400} };
+    int test = 3;
+
     double x1 = 0, y1 = 0, x2 = 640, y2 = 480;
     switch (test) {
     case 0:
@@ -361,6 +378,17 @@ bool gfInitScene(){
         DrawCircle({ 300, 300 }, 150, RGBPIXEL::Red());
 
         break;
+    case 3:
+    {
+        point q0 = { 100,400 }, q1 = { 320,100 }, q2 = {540,400};
+        point c0, c1, c2, c3;
+
+        ConvertQuadraticToCubic(q0,q1,q2,c0,c1,c2,c3);
+        gfDrawBezie(q0,q1,q2, RGBPIXEL::Red(),150);
+        gfDrawBezie(c0, c1, c2, c3, RGBPIXEL::Blue(),150);
+
+        break;
+    }
     }
 
     

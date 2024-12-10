@@ -66,7 +66,8 @@ PType PInPolygonEOMode(double x, double y, const point *p, int n);
 PType PInPolygonNZWMode(double x, double y, const point* p, int n);
 void gfDrawPolygon(std::vector<point> const& points, PType(*inFucn)(double, double, const point* p, int n) = PInPolygonEOMode);
 PolygonType getPolygonType(std::vector<point> const& vert);
-void gfDrawBezie(point p0, point p1, point p2, point p3, int qual = 200, RGBPIXEL color = RGBPIXEL::Blue());
+void gfDrawBezie(point p0, point p1, point p2, point p3, RGBPIXEL color = RGBPIXEL::Blue(), int qual = 200);
+void gfDrawBezie(point p0, point p1, point p2, RGBPIXEL color = RGBPIXEL::Blue(), int qual = 200);
 
 void DrawCircle(point p0, double r, RGBPIXEL color = RGBPIXEL::Blue());
 
