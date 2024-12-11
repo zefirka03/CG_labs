@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include <array>
 #include <algorithm>
 #include "png_files.h"
 
@@ -45,7 +46,7 @@ public:
 
             auto new_centroids = _update_centroids(colors, labels);
             if (centroids == new_centroids) {
-                break; 
+                break;
             }
             centroids = std::move(new_centroids);
         }
@@ -74,6 +75,7 @@ private:
         return centroids;
     }
 
+
     std::vector<Color_8> _update_centroids(const std::vector<Color_8>& colors, const std::vector<int>& labels) {
         std::vector<std::vector<Color_8>> color_groups(k);
 
@@ -86,21 +88,44 @@ private:
 
         for (int i = 0; i < k; ++i) {
             if (!color_groups[i].empty()) {
-                std::vector<int> r_values, g_values, b_values;
+                std::array<int, 256> r_hist = { 0 };
+                std::array<int, 256> g_hist = { 0 };
+                std::array<int, 256> b_hist = { 0 };
+
                 for (const auto& color : color_groups[i]) {
-                    r_values.push_back(color.r);
-                    g_values.push_back(color.g);
-                    b_values.push_back(color.b);
+                    r_hist[color.r]++;
+                    g_hist[color.g]++;
+                    b_hist[color.b]++;
                 }
 
-                std::sort(r_values.begin(), r_values.end());
-                std::sort(g_values.begin(), g_values.end());
-                std::sort(b_values.begin(), b_values.end());
+                auto find_median = [](const std::array<int, 256>& hist) {
+                    int total = 0;
+                    for (int count : hist) {
+                        total += count;
+                    }
 
-                size_t n = r_values.size();
-                new_centroids_out[i].r = (n % 2 == 0) ? (r_values[n / 2 - 1] + r_values[n / 2]) / 2 : r_values[n / 2];
-                new_centroids_out[i].g = (n % 2 == 0) ? (g_values[n / 2 - 1] + g_values[n / 2]) / 2 : g_values[n / 2];
-                new_centroids_out[i].b = (n % 2 == 0) ? (b_values[n / 2 - 1] + b_values[n / 2]) / 2 : b_values[n / 2];
+                    int median_index = (total - 1) / 2;
+                    int cumulative_count = 0;
+
+                    for (int value = 0; value < 256; ++value) {
+                        cumulative_count += hist[value];
+                        if (cumulative_count > median_index) {
+                            if (total % 2 == 0 && cumulative_count - hist[value] <= median_index) {
+                                for (int next_value = value + 1; next_value < 256; ++next_value) {
+                                    if (hist[next_value] > 0) {
+                                        return (value + next_value) / 2;
+                                    }
+                                }
+                            }
+                            return value;
+                        }
+                    }
+                    return 0;
+                };
+
+                new_centroids_out[i].r = find_median(r_hist);
+                new_centroids_out[i].g = find_median(g_hist);
+                new_centroids_out[i].b = find_median(b_hist);
                 new_centroids_out[i].a = color_groups[i][0].a;
             }
         }
@@ -108,7 +133,6 @@ private:
         return new_centroids_out;
     }
 };
-
 
 void quantize_image(Image& img, int k) {
     std::vector<Color_8> colors(img.width * img.height);
@@ -136,9 +160,9 @@ void quantize_image(Image& img, int k) {
 
 int main() {
     {
-        Image a("img/eifel.png");
+        Image a("img/capy.png");
         quantize_image(a, 256);
-        a.write_png_file("img/eifel_256.png");
+        a.write_png_file("img/capy_32.png");
     }
     
 
