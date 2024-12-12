@@ -1,5 +1,6 @@
 ﻿#include <SDL3/SDL.h>
 #include <vector>
+#include <glm.hpp>
 
 SDL_Renderer* renderer;
 
@@ -68,50 +69,74 @@ void drawLine(Point3D start, Point3D end) {
     drawPixel(end.x, end.y); // Рисуем конечный пиксель
 }
 
-// Функция для построения параллельной проекции параллелепипеда
-void drawParallelProjection(const std::vector<Point3D>& vertices) {
-    for (const auto& vertex : vertices) {
-        drawPixel(static_cast<int>(vertex.x), static_cast<int>(vertex.y));
-    }
-}
+std::vector<std::vector<Point3D>> transform(std::vector<std::vector<Point3D>> faces, std::vector<std::vector<double>> T) {
+    std::vector<std::vector<Point3D>> result = {};
 
-// Функция для построения одноточечной перспективной проекции
-void drawPerspectiveProjection(const std::vector<Point3D>& vertices, float k) {
-    for (const auto& vertex : vertices) {
-        float z = vertex.z + k; // смещение по оси Z
-        if (z != 0) {
-            int x_perspective = static_cast<int>(vertex.x * (k / z));
-            int y_perspective = static_cast<int>(vertex.y * (k / z));
-            drawPixel(x_perspective, y_perspective);
+    for (int i = 0; i < faces.size(); ++i) {
+
+        std::vector<Point3D> face = {};
+
+        for (int j = 0; j < 4; ++j) {
+
+            Point3D p = faces[i][j];
+
+
+            double x_new = p.x * T[0][0] + p.y * T[1][0] + p.z * T[2][0] + T[3][0];
+            double y_new = p.x * T[0][1] + p.y * T[1][1] + p.z * T[2][1] + T[3][1];
+            double z_new = p.x * T[0][2] + p.y * T[1][2] + p.z * T[2][2] + T[3][2];
+            double H = p.x * T[0][3] + p.y * T[1][3] + p.z * T[2][3] + T[3][3];
+
+            if (H == 0) {
+                H = 1;
+            }
+
+            Point3D p_new = { x_new / H, y_new / H, z_new / H };
+
+            face.push_back(p_new);
         }
+
+        result.push_back(face);
     }
+
+    return result;
 }
 
-// Функция для удаления невидимых ребер
-void drawVisibleEdges(const std::vector<Point3D>& vertices, const std::vector<std::pair<int, int>>& edges) {
-    for (const auto& edge : edges) {
-        Point3D start = vertices[edge.first];
-        Point3D end = vertices[edge.second];
+std::vector<std::vector<Point3D>> resize(std::vector<std::vector<Point3D>> faces, double M) {
+    std::vector<std::vector<double>> T = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
+        {0, 0, 0, 1 / M},
+    };
 
-        // Простой алгоритм: если оба конца ребра имеют положительное Z, то оно видимо
-        if (start.z > 0 && end.z > 0) {
-            drawLine(start, end);
-        }
-    }
+    return transform(faces, T);
 }
 
-// Функция для анимации параллелепипеда
-void animateCuboid(std::vector<Point3D>& vertices, float rotationSpeed, float deltaTime) {
-    // Простая анимация: вращение параллелепипеда вокруг оси
-    float angle = rotationSpeed * deltaTime;
+std::vector<std::vector<Point3D>> translate(std::vector<std::vector<Point3D>> faces, double tx, double ty, double tz) {
+    std::vector<std::vector<double>> T = {
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
+        {tx, ty, tz, 1},
+    };
 
-    for (auto& vertex : vertices) {
-        // Применение вращения (например, вокруг оси Z)
-        float x_new = vertex.x * cos(angle) - vertex.y * sin(angle);
-        float y_new = vertex.x * sin(angle) + vertex.y * cos(angle);
-        vertex.x = x_new;
-        vertex.y = y_new;
-    }
+    return transform(faces, T);
+}
+
+std::vector<std::vector<Point3D>> getDefaultCube() {
+    std::vector<std::vector<Point3D>> faces = {
+        { {1, 0, 1}, {1, 1, 1},  {0, 1, 1}, {0, 0, 1}, }, // верхняя грань
+        { {0, 0, 0}, {0, 1, 0}, {1, 1, 0}, {1, 0, 0} }, // нижняя грань
+        { {1, 0, 1}, {0, 0, 1}, {0, 0, 0}, {1, 0, 0}, }, // левая грань
+        { {1, 1, 0},  {0, 1, 0},  {0, 1, 1}, {1, 1, 1}, }, // правая грань
+        { {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {0, 1, 0}, }, // задняя грань
+        { {1, 1, 1}, {1, 0, 1}, {1, 0, 0}, {1, 1, 0} }, // передняя грань
+    };
+
+    faces = resize(faces, 200);
+    faces = translate(faces, 200, 200, 200);
+
+    return faces;
 }
 
 int main(int argc, char* argv[]) {
@@ -137,16 +162,7 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
 
 
-    std::vector<Point3D> cuboidVertices = {
-        { -100, -100, -100 }, { 100, -100, -100 }, { 100, 100, -100 }, { -100, 100, -100 },
-        { -100, -100, 100 }, { 100, -100, 100 }, { 100, 100, 100 }, { -100, 100, 100 }
-    };
-
-    std::vector<std::pair<int, int>> edges = {
-        { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 },
-        { 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 4 },
-        { 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 }
-    };
+    std::vector<Point3D> cuboidVertices = createCuboidVertices(100,100,100);
 
     float k = 5.0f; // Центр проекции
     float rotationSpeed = 0.01f; // Скорость вращения
@@ -164,16 +180,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255); // Устанавливаем цвет фона
         SDL_RenderClear(renderer);
 
-        animateCuboid(cuboidVertices, rotationSpeed, deltaTime);
-
-        // Отрисовка параллельной проекции
-        drawParallelProjection(cuboidVertices);
-
-        // Отрисовка перспективной проекции
-        drawPerspectiveProjection(cuboidVertices, k);
-
-        // Удаление невидимых ребер
-        drawVisibleEdges(cuboidVertices, edges);
+        drawCuboidWithCulling(cuboidVertices);
 
         SDL_RenderPresent(renderer);
     }

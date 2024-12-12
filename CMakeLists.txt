@@ -30,6 +30,6 @@ file(GLOB_RECURSE SRC_FILES
 
 add_executable(CGlab_5 "src/lab5.cpp")
 
-target_include_directories(CGlab_5 PRIVATE ${SDL_INCLUDE_DIR})
+target_include_directories(CGlab_5 PRIVATE ${SDL_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/deps/glm/glm")
 target_link_libraries(CGlab_5 PRIVATE SDL3::SDL3-static)
 
