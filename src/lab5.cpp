@@ -264,7 +264,7 @@ int main(int argc, char* argv[]) {
         double deltaTime = 0;
         double angle = 0;
 
-        int scene = 3;
+        int scene = 4;
 
         while (running) {
             LAST = NOW;
@@ -294,7 +294,7 @@ int main(int argc, char* argv[]) {
                 Scene_rotateXYProjection(angle);
                 break;
             case 4:
-                Scene_rotatePointProjection(-0.0008, angle);
+                Scene_rotatePointProjection(-0.0005, angle);
                 break;
             default:
                 break;
