@@ -1,4 +1,5 @@
 ﻿#include <SDL3/SDL.h>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -29,11 +30,39 @@ struct Point3D {
     float dot(const Point3D& other) const {
         return x * other.x + y * other.y + z * other.z;
     }
+
+    float length() const {
+        return std::sqrt(x * x + y * y + z * z);
+    }
+
+    Point3D normalize() const {
+        float len = length();
+        return { x / len, y / len, z / len };
+    }
 };
+
+struct Light {
+    Point3D position;
+    SDL_Color intensity; // RGB intensity
+};
+
+Light light = { { 500, 200, 100 }, { 255, 255, 255, 255 } };
+Point3D camera = { 0, 0, 0 }; // Положение камеры
 
 void drawPixel(int x, int y, SDL_Color color = { 255, 255, 255, 255 }) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderPoint(renderer, x, y);
+}
+
+
+bool isClockwise(const std::vector<Point3D>& points) {
+    float sum = 0;
+    for (size_t i = 0; i < points.size(); i++) {
+        const Point3D& p1 = points[i];
+        const Point3D& p2 = points[(i + 1) % points.size()];
+        sum += (p2.x - p1.x) * (p2.y + p1.y);
+    }
+    return sum < 0; // Если сумма меньше 0, то порядок по часовой стрелке
 }
 
 void drawLine(int x1, int y1, int x2, int y2, SDL_Color color) {
@@ -67,6 +96,166 @@ void drawLine(int x1, int y1, int x2, int y2, SDL_Color color) {
             e += 2 * dx;
         }
     }
+}
+
+// Функция для проекции 3D-точки в 2D
+void project(const Point3D& point, int& outX, int& outY) {
+    // Простая ортографическая проекция
+    outX = static_cast<int>(point.x);
+    outY = static_cast<int>(point.y);
+}
+
+enum CLPointType {
+    LEFT,
+    RIGHT,
+    BEYOND,
+    BEHIND,
+    BETWEEN,
+    ORIGIN,
+    DESTINATION
+};
+
+enum EType {
+    TOUCHING,
+    CROSS_LEFT,
+    CROSS_RIGHT,
+    INESSENTIAL
+};
+
+enum PType {
+    INSIDE,
+    OUTSIDE
+};
+
+enum PolygonType {
+    CONVEX,
+    CONCAVE
+};
+
+enum IntersectType {
+    SAME,
+    PARALLEL,
+    SKEW,
+    SKEW_CROSS,
+    SKEW_NO_CROSS
+};
+
+
+CLPointType Classify(double x1, double y1, double x2, double y2, double x, double y) {
+    double ax = x2 - x1;
+    double ay = y2 - y1;
+    double bx = x - x1;
+    double by = y - y1;
+    double s = ax * by - bx * ay;
+    if (s > 0) return LEFT;
+    if (s < 0) return RIGHT;
+    if ((ax * bx < 0) || (ay * by < 0))
+        return BEHIND;
+    if ((ax * ax + ay * ay) < (bx * bx + by * by))
+        return BEHIND;
+    if (x1 == x && y1 == y)
+        return ORIGIN;
+    if (x2 == x && y2 == y)
+        return DESTINATION;
+    return BETWEEN;
+}
+
+EType EdgeType(double ox, double oy, double dx, double dy, double ax, double ay) {
+    switch (Classify(ox, oy, dx, dy, ax, ay)) {
+    case LEFT:
+        if (ay > oy && ay <= dy) return CROSS_LEFT;
+        else return INESSENTIAL;
+    case RIGHT:
+        if (ay > dy && ay <= oy) return CROSS_RIGHT;
+        else return INESSENTIAL;
+    case BETWEEN:
+    case ORIGIN:
+    case DESTINATION:
+        return TOUCHING;
+    default:
+        return INESSENTIAL;
+    }
+}
+
+PType PInPolygonEOMode(double x, double y, const Point3D* p, int n) {
+    int param = 0;
+    for (int i = 0; i < n; i++) {
+        switch (EdgeType(p[i].x, p[i].y, p[(i + 1) % n].x, p[(i + 1) % n].y, x, y)) {
+        case TOUCHING:
+            return INSIDE;
+        case CROSS_LEFT:
+        case CROSS_RIGHT:
+            param = 1 - param;
+        }
+    }
+    if (param == 1) return INSIDE;
+    else return OUTSIDE;
+}
+
+void drawPolygonFilled(std::vector<Point3D> const& points, PType(*inFucn)(double, double, const Point3D* p, int n) = PInPolygonEOMode) {
+    if (!isClockwise(points)) return;
+    if (points.empty()) return;
+
+    Point3D v1 = points[1] - points[0];
+    Point3D v2 = points[2] - points[0];
+    Point3D normal = v1.cross(v2).normalize();
+
+    std::vector<SDL_Color> vertexColors(points.size());
+    for (size_t i = 0; i < points.size(); ++i) {
+        Point3D lightDir = (light.position - points[i]).normalize();
+        float diffuse = std::max(normal.dot(lightDir), 0.0f);
+
+        SDL_Color baseColor = { 255, 255, 255, 255 }; 
+        vertexColors[i].r = std::min(255.0f, baseColor.r * diffuse);
+        vertexColors[i].g = std::min(255.0f, baseColor.g * diffuse);
+        vertexColors[i].b = std::min(255.0f, baseColor.b * diffuse);
+        vertexColors[i].a = 255;
+    }
+
+    int x_min = INT_MAX, x_max = -INT_MAX;
+    int y_min = INT_MAX, y_max = -INT_MAX;
+
+    for (auto& point : points) {
+        x_min = std::min(x_min, static_cast<int>(point.x));
+        x_max = std::max(x_max, static_cast<int>(point.x));
+
+        y_min = std::min(y_min, static_cast<int>(point.y));
+        y_max = std::max(y_max, static_cast<int>(point.y));
+    }
+
+    for (int x = x_min; x < x_max; ++x) {
+        for (int y = y_min; y < y_max; ++y) {
+            if (inFucn(x, y, points.data(), points.size()) == PType::INSIDE) {
+
+                float alpha = ((points[1].y - points[2].y) * (x - points[2].x) + (points[2].x - points[1].x) * (y - points[2].y)) /
+                    ((points[1].y - points[2].y) * (points[0].x - points[2].x) + (points[2].x - points[1].x) * (points[0].y - points[2].y));
+
+                float beta = ((points[2].y - points[0].y) * (x - points[2].x) + (points[0].x - points[2].x) * (y - points[2].y)) /
+                    ((points[1].y - points[2].y) * (points[0].x - points[2].x) + (points[2].x - points[1].x) * (points[0].y - points[2].y));
+
+                float gamma = 1.0f - alpha - beta;
+
+                SDL_Color color;
+                color.r = static_cast<Uint8>(std::min(255.0f, alpha * vertexColors[0].r + beta * vertexColors[1].r + gamma * vertexColors[2].r));
+                color.g = static_cast<Uint8>(std::min(255.0f, alpha * vertexColors[0].g + beta * vertexColors[1].g + gamma * vertexColors[2].g));
+                color.b = static_cast<Uint8>(std::min(255.0f, alpha * vertexColors[0].b + beta * vertexColors[1].b + gamma * vertexColors[2].b));
+                color.a = 255;
+
+                drawPixel(x, y, color);
+            }
+        }
+    }
+}
+
+
+void drawCubeWithGouraudShading(const std::vector<std::vector<Point3D>>& faces) {
+    for (const auto& face : faces) {
+        drawPolygonFilled(face);
+    }
+}
+
+void drawCube_filled(const std::vector<std::vector<Point3D>>& faces) {
+    drawCubeWithGouraudShading(faces);
 }
 
 std::vector<std::vector<Point3D>> transform(const std::vector<std::vector<Point3D>>& faces, const std::vector<std::vector<double>>& T) {
@@ -113,15 +302,7 @@ std::vector<std::vector<Point3D>> translate(const std::vector<std::vector<Point3
 }
 
 std::vector<std::vector<Point3D>> getDefaultCube() {
-    std::vector<std::vector<Point3D>> faces = {
-        { {1, 0, 1}, {1, 1, 1},  {0, 1, 1}, {0, 0, 1} },
-        { {0, 0, 0}, {0, 1, 0}, {1, 1, 0}, {1, 0, 0} },
-        { {1, 0, 1}, {0, 0, 1}, {0, 0, 0}, {1, 0, 0} },
-        { {1, 1, 0}, {0, 1, 0}, {0, 1, 1}, {1, 1, 1} },
-        { {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {0, 1, 0} },
-        { {1, 1, 1}, {1, 0, 1}, {1, 0, 0}, {1, 1, 0} },
-    };
-
+    std::vector<std::vector<Point3D>> faces = { { {1, 0, 1}, {1, 1, 1}, {0, 1, 1}, {0, 0, 1} }, { {0, 0, 0}, {0, 1, 0}, {1, 1, 0}, {1, 0, 0} }, { {1, 0, 1}, {0, 0, 1}, {0, 0, 0}, {1, 0, 0} }, { {1, 1, 0}, {0, 1, 0}, {0, 1, 1}, {1, 1, 1} }, { {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {0, 1, 0} }, { {1, 1, 1}, {1, 0, 1}, {1, 0, 0}, {1, 1, 0} }, };
     faces = resize(faces, 200);
     return translate(faces, 200, 200, 200);
 }
@@ -264,7 +445,7 @@ int main(int argc, char* argv[]) {
         double deltaTime = 0;
         double angle = 0;
 
-        int scene = 4;
+        int scene = 5;
 
         while (running) {
             LAST = NOW;
@@ -296,6 +477,19 @@ int main(int argc, char* argv[]) {
             case 4:
                 Scene_rotatePointProjection(-0.0005, angle);
                 break;
+            case 5: {
+                auto faces = getDefaultCube();
+                faces = rotateFaces(faces, { 10, 10, 10 }, angle);
+                std::vector<std::vector<double>> T = {
+                    {1, 0, 0, 0},
+                    {0, 1, 0, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 1},
+                };
+                auto new_faces = transform(faces, T);
+                drawCube_filled(new_faces);
+                break;
+            }
             default:
                 break;
             }
