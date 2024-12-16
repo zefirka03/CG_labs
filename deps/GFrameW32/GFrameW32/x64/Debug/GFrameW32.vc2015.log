@@ -1,50 +1,61 @@
-﻿  Graphics.cpp
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(26,18): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/Graphics.cpp")
+﻿  stdafx.cpp
+  DIBSection.cpp
+  GF.cpp
+  GFrameW32.cpp
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.h(26,18): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+  Graphics.cpp
+  (compiling source file '/GFrameW32.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.h(27,18): warning C4244: *=: преобразование "double" в "int", возможна потеря данных
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.h(27,18): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+  (compiling source file '/GFrameW32.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(168,56): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.h(26,18): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(263,20): warning C4101: demon: неиспользованная локальная переменная
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.h(27,18): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "1" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(168,56): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "2" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(263,20): warning C4101: 'demon': unreferenced local variable
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "3" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 1 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "4" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 2 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "5" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 3 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "6" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 4 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "7" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 5 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: "printf": в строке форматирования "%f" требуется аргумент типа "double", но вариативный аргумент "8" имеет тип "int"
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 6 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,38): warning C4189: y2: локальная переменная инициализирована, но не использована
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 7 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,20): warning C4189: y1: локальная переменная инициализирована, но не использована
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(387,16): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 8 has type 'int'
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,12): warning C4189: x1: локальная переменная инициализирована, но не использована
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,38): warning C4189: 'y2': local variable is initialized but not referenced
+  (compiling source file '/Graphics.cpp')
   
-C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,28): warning C4189: x2: локальная переменная инициализирована, но не использована
-  (компиляция исходного файла "/Graphics.cpp")
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,20): warning C4189: 'y1': local variable is initialized but not referenced
+  (compiling source file '/Graphics.cpp')
   
-  GFrameW32.vc2015.vcxproj -> C:\Users\zefir\VSProjects\CGlabs\deps\GFrameW32\x64\Debug\GFrameW32.exe
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,12): warning C4189: 'x1': local variable is initialized but not referenced
+  (compiling source file '/Graphics.cpp')
+  
+D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\GFrameW32\Graphics.cpp(367,28): warning C4189: 'x2': local variable is initialized but not referenced
+  (compiling source file '/Graphics.cpp')
+  
+  Generating Code...
+  GFrameW32.vc2015.vcxproj -> D:\VSProjects\CGlabs\CG_labs\deps\GFrameW32\x64\Debug\GFrameW32.exe
